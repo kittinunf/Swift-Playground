@@ -12,6 +12,11 @@
 		FA103C751DC0C582003205E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA103C731DC0C582003205E4 /* Main.storyboard */; };
 		FA103C771DC0C582003205E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA103C761DC0C582003205E4 /* Assets.xcassets */; };
 		FA103C7A1DC0C583003205E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA103C781DC0C583003205E4 /* LaunchScreen.storyboard */; };
+		FA103C821DC0C5B8003205E4 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA103C811DC0C5B8003205E4 /* Networking.swift */; };
+		FA3C5C051DC0CB0E009E768C /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C031DC0CB0E009E768C /* RxCocoa.framework */; };
+		FA3C5C061DC0CB0E009E768C /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C041DC0CB0E009E768C /* RxSwift.framework */; };
+		FA3C5C091DC0CEC4009E768C /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C081DC0CEC4009E768C /* Result.framework */; };
+		FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0A1DC0E8ED009E768C /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +27,11 @@
 		FA103C761DC0C582003205E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA103C791DC0C583003205E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA103C7B1DC0C583003205E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA103C811DC0C5B8003205E4 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		FA3C5C031DC0CB0E009E768C /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		FA3C5C041DC0CB0E009E768C /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		FA3C5C081DC0CEC4009E768C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		FA3C5C0A1DC0E8ED009E768C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +39,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA3C5C051DC0CB0E009E768C /* RxCocoa.framework in Frameworks */,
+				FA3C5C061DC0CB0E009E768C /* RxSwift.framework in Frameworks */,
+				FA3C5C091DC0CEC4009E768C /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +53,7 @@
 			children = (
 				FA103C6E1DC0C582003205E4 /* Playground */,
 				FA103C6D1DC0C582003205E4 /* Products */,
+				FA3C5C021DC0CB0D009E768C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,8 +74,20 @@
 				FA103C761DC0C582003205E4 /* Assets.xcassets */,
 				FA103C781DC0C583003205E4 /* LaunchScreen.storyboard */,
 				FA103C7B1DC0C583003205E4 /* Info.plist */,
+				FA103C811DC0C5B8003205E4 /* Networking.swift */,
+				FA3C5C0A1DC0E8ED009E768C /* User.swift */,
 			);
 			path = Playground;
+			sourceTree = "<group>";
+		};
+		FA3C5C021DC0CB0D009E768C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA3C5C081DC0CEC4009E768C /* Result.framework */,
+				FA3C5C031DC0CB0E009E768C /* RxCocoa.framework */,
+				FA3C5C041DC0CB0E009E768C /* RxSwift.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +100,7 @@
 				FA103C681DC0C582003205E4 /* Sources */,
 				FA103C691DC0C582003205E4 /* Frameworks */,
 				FA103C6A1DC0C582003205E4 /* Resources */,
+				FA3C5C071DC0CB26009E768C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -131,11 +158,32 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FA3C5C071DC0CB26009E768C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FA103C681DC0C582003205E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */,
+				FA103C821DC0C5B8003205E4 /* Networking.swift in Sources */,
 				FA103C721DC0C582003205E4 /* ViewController.swift in Sources */,
 				FA103C701DC0C582003205E4 /* AppDelegate.swift in Sources */,
 			);
@@ -260,6 +308,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.kittinunf.ios.Playground;
@@ -272,6 +324,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.kittinunf.ios.Playground;
@@ -299,6 +355,7 @@
 				FA103C801DC0C583003205E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
