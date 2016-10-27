@@ -17,6 +17,7 @@
 		FA3C5C061DC0CB0E009E768C /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C041DC0CB0E009E768C /* RxSwift.framework */; };
 		FA3C5C091DC0CEC4009E768C /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C081DC0CEC4009E768C /* Result.framework */; };
 		FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0A1DC0E8ED009E768C /* User.swift */; };
+		FA3C5C0D1DC1D128009E768C /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0C1DC1D128009E768C /* UserViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		FA3C5C041DC0CB0E009E768C /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		FA3C5C081DC0CEC4009E768C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		FA3C5C0A1DC0E8ED009E768C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FA3C5C0C1DC1D128009E768C /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				FA103C7B1DC0C583003205E4 /* Info.plist */,
 				FA103C811DC0C5B8003205E4 /* Networking.swift */,
 				FA3C5C0A1DC0E8ED009E768C /* User.swift */,
+				FA3C5C0C1DC1D128009E768C /* UserViewController.swift */,
 			);
 			path = Playground;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */,
+				FA3C5C0D1DC1D128009E768C /* UserViewController.swift in Sources */,
 				FA103C821DC0C5B8003205E4 /* Networking.swift in Sources */,
 				FA103C721DC0C582003205E4 /* UserListViewController.swift in Sources */,
 				FA103C701DC0C582003205E4 /* AppDelegate.swift in Sources */,

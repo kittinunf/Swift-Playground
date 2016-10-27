@@ -51,12 +51,11 @@ extension User {
         return Github.GetAllUser().call().map { $0.0 }
     }
 
-//    static func get(name: String, handler: @escaping (Result<User, RequestError>) -> ()) {
-//        return GithubClient.UserAPI(with: name).call { (result, response) in
-//            handler(result)
-//        }
-//    }
-
+    static func get(name: String, handler: @escaping (Result<User, RequestError>) -> ()) {
+        return Github.GetUser(with: name).call { (result, response) in
+            handler(result)
+        }
+    }
 }
 
 extension Github {

@@ -120,32 +120,32 @@ extension IntResponse {
 }
 
 protocol RequestCallable : RequestConstructable, Response {
-//    func call(with handler: (Result<T, RequestError>, HTTPURLResponse?) -> ())
+    func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ())
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)>
 }
 
 extension RequestCallable {
-//    func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
-//        guard let request = self.createRequest() else {
-//            let error = RequestError(kind: .unknown)
-//            handler(.failure(error), nil)
-//            return
-//        }
-//
-//        let task = performTask(with: request, success: { (parsed, response) in
-//                let result: Result<T, RequestError> = .success(parsed)
-//                handler((result, response))
-//            }, failure: { (error, response) in
-//                let result: Result<T, RequestError> = .failure(error)
-//                handler((result, response))
-//            }, parseFailure: { (error, response) in
-//                let result: Result<T, RequestError> = .failure(error)
-//                handler((result, response))
-//            }) {
-//            }
-//
-//        task.resume()
-//    }
+    func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
+        guard let request = self.createRequest() else {
+            let error = RequestError(kind: .unknown)
+            handler(.failure(error), nil)
+            return
+        }
+
+        let task = performTask(with: request, success: { (parsed, response) in
+                let result: Result<T, RequestError> = .success(parsed)
+                handler((result, response))
+            }, failure: { (error, response) in
+                let result: Result<T, RequestError> = .failure(error)
+                handler((result, response))
+            }, parseFailure: { (error, response) in
+                let result: Result<T, RequestError> = .failure(error)
+                handler((result, response))
+            }) {
+            }
+
+        task.resume()
+    }
 
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)> {
         return Observable.create { observer in
