@@ -119,41 +119,80 @@ extension IntResponse {
     }
 }
 
-protocol ObservableRequestCallable : RequestConstructable, Response {
+protocol RequestCallable : RequestConstructable, Response {
+//    func call(with handler: (Result<T, RequestError>, HTTPURLResponse?) -> ())
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)>
 }
 
-extension ObservableRequestCallable {
+extension RequestCallable {
+//    func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
+//        guard let request = self.createRequest() else {
+//            let error = RequestError(kind: .unknown)
+//            handler(.failure(error), nil)
+//            return
+//        }
+//
+//        let task = performTask(with: request, success: { (parsed, response) in
+//                let result: Result<T, RequestError> = .success(parsed)
+//                handler((result, response))
+//            }, failure: { (error, response) in
+//                let result: Result<T, RequestError> = .failure(error)
+//                handler((result, response))
+//            }, parseFailure: { (error, response) in
+//                let result: Result<T, RequestError> = .failure(error)
+//                handler((result, response))
+//            }) {
+//            }
+//
+//        task.resume()
+//    }
+
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)> {
         return Observable.create { observer in
-            let session = URLSession.shared
             guard let request = self.createRequest() else { return Disposables.create() }
 
-            let task = session.dataTask(with: request) { data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    if !(200...299 ~= response.statusCode) {
-                        let error = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!)
-                        observer.onNext((.failure(error), response))
-                    } else if let data = data, let result = self.parse(data: data)  {
-                        observer.onNext((.success(result), response))
-                    } else {
-                        let error = RequestError(kind: .deserialization)
-                        observer.onNext((.failure(error), response))
-                    }
-                } else {
-                    let error = RequestError(kind: .unknown)
-                    observer.onNext((.failure(error), nil))
-                }
-                observer.onCompleted()
-            }
-
-            task.resume()
+            let task = self.performTask(with: request, success: { parsed, response in
+                observer.onNext((.success(parsed), response))
+                }, failure: { error, response in
+                    observer.onNext((.failure(error), response))
+                }, parseFailure: { error, response in
+                    observer.onNext((.failure(error), response))
+                }, finish: { 
+                    observer.onCompleted()
+                })
 
             return Disposables.create(with: task.cancel)
         }
     }
+
+    private func performTask(with request: URLRequest,
+                             success: @escaping (T, HTTPURLResponse?) -> (),
+                             failure: @escaping (RequestError, HTTPURLResponse?) -> (),
+                             parseFailure: @escaping (RequestError, HTTPURLResponse?) -> (),
+                             finish: @escaping () -> ()) -> URLSessionDataTask {
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if !(200...299 ~= response.statusCode) {
+                    let error = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!)
+                    failure(error, response)
+                } else if let data = data, let result = self.parse(data: data)  {
+                    success(result, response)
+                } else {
+                    let error = RequestError(kind: .deserialization)
+                    parseFailure(error, response)
+                }
+            } else {
+                let error = RequestError(kind: .unknown)
+                failure(error, nil)
+            }
+            finish()
+        }
+
+        task.resume()
+        return task
+    }
 }
 
-struct GithubClient {
+struct Github {
     static let url = "https://api.github.com"
 }
