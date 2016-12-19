@@ -18,6 +18,7 @@
 		FA3C5C091DC0CEC4009E768C /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3C5C081DC0CEC4009E768C /* Result.framework */; };
 		FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0A1DC0E8ED009E768C /* User.swift */; };
 		FA3C5C0D1DC1D128009E768C /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0C1DC1D128009E768C /* UserViewController.swift */; };
+		FAB24CA41E0802EA003C20DC /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB24CA31E0802EA003C20DC /* JSON.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		FA3C5C081DC0CEC4009E768C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		FA3C5C0A1DC0E8ED009E768C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA3C5C0C1DC1D128009E768C /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		FAB24CA31E0802EA003C20DC /* JSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSON.framework; path = Carthage/Build/iOS/JSON.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 				FA3C5C051DC0CB0E009E768C /* RxCocoa.framework in Frameworks */,
 				FA3C5C061DC0CB0E009E768C /* RxSwift.framework in Frameworks */,
 				FA3C5C091DC0CEC4009E768C /* Result.framework in Frameworks */,
+				FAB24CA41E0802EA003C20DC /* JSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +89,7 @@
 		FA3C5C021DC0CB0D009E768C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAB24CA31E0802EA003C20DC /* JSON.framework */,
 				FA3C5C081DC0CEC4009E768C /* Result.framework */,
 				FA3C5C031DC0CB0E009E768C /* RxCocoa.framework */,
 				FA3C5C041DC0CB0E009E768C /* RxSwift.framework */,
@@ -121,7 +125,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "kittinun-vantasin";
 				TargetAttributes = {
 					FA103C6B1DC0C582003205E4 = {
@@ -171,6 +175,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/JSON.framework",
 			);
 			outputPaths = (
 			);
@@ -233,6 +238,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -283,6 +289,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

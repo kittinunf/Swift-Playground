@@ -37,17 +37,17 @@ protocol Request {
     var baseURL: URL { get }
     var method: Method { get }
     var path: String { get }
-    var body: [String: AnyObject]? { get }
-    var header: [String: AnyObject]? { get }
-    var queryParam: [String: AnyObject]? { get }
+    var body: [String: AnyObject] { get }
+    var header: [String: AnyObject] { get }
+    var queryParam: [String: AnyObject] { get }
 }
 
 extension Request {
     var method: Method { return .get }
     var path: String { return "" }
-    var body: [String: AnyObject]? { return nil }
-    var header: [String: AnyObject]? { return nil }
-    var queryParam: [String: AnyObject]? { return nil }
+    var body: [String: AnyObject] { return [:] }
+    var header: [String: AnyObject] { return [:] }
+    var queryParam: [String: AnyObject] { return [:] }
 }
 
 protocol RequestConstructable : Request {
@@ -60,9 +60,9 @@ extension RequestConstructable {
 
         components.path += path
 
-        let query = queryParam?.reduce([URLQueryItem]()) { acc , dict in
+        let query = queryParam.reduce([URLQueryItem]()) { acc , dict in
             var mutable = acc
-            mutable?.append(URLQueryItem(name: dict.0, value: dict.1 as? String))
+            mutable.append(URLQueryItem(name: dict.0, value: dict.1 as? String))
             return mutable
         }
 
@@ -72,14 +72,14 @@ extension RequestConstructable {
 
         var request = URLRequest(url: constructedURL)
         request.httpMethod = method.rawValue
-        if let body = body {
+        if !body.isEmpty {
             if request.httpMethod != Method.get.rawValue {
                 request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
                 request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
             }
         }
 
-        header?.forEach { key, value in
+        header.forEach { key, value in
             request.addValue(String(describing: value), forHTTPHeaderField: key)
         }
 

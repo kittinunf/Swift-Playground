@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import Result
+import JSON
 
 struct User {
     let id: Int
@@ -16,15 +17,20 @@ struct User {
     let avatarUrl: String
 }
 
+extension User : JSONDeserializable {
+    init(jsonRepresentation: JSONDictionary) throws {
+        id = try decode(jsonRepresentation, key: "id")
+        login = try decode(jsonRepresentation, key: "login")
+        avatarUrl = try decode(jsonRepresentation, key: "avatar_url")
+    }
+}
+
 protocol UserResponse : Response { }
 
 extension UserResponse {
     func parse(data: Data) -> User? {
         let dict = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String : Any]
-        let id = dict["id"] as! Int
-        let login = dict["login"] as! String
-        let avatarUrl = dict["avatar_url"] as! String
-        return User(id: id, login: login, avatarUrl: avatarUrl)
+        return try? User(jsonRepresentation: dict)
     }
 }
 
@@ -33,12 +39,7 @@ protocol UserArrayResponse : Response { }
 extension UserArrayResponse {
     func parse(data: Data) -> [User]? {
         let arr = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [[String : Any]]
-        return arr.map { dict in
-            let id = dict["id"] as! Int
-            let login = dict["login"] as! String
-            let avatarUrl = dict["avatar_url"] as! String
-            return User(id: id, login: login, avatarUrl: avatarUrl)
-        }
+        return try? arr.map(User.init)
     }
 }
 

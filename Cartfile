@@ -1,2 +1,3 @@
 github "ReactiveX/RxSwift" ~> 3.0
 github "antitypical/Result" ~> 3.0.0
+github "soffes/JSON" ~> 0.1
