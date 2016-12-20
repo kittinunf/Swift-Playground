@@ -19,6 +19,7 @@
 		FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0A1DC0E8ED009E768C /* User.swift */; };
 		FA3C5C0D1DC1D128009E768C /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5C0C1DC1D128009E768C /* UserViewController.swift */; };
 		FAB24CA41E0802EA003C20DC /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB24CA31E0802EA003C20DC /* JSON.framework */; };
+		FAC51F681E08CEC70084D4EE /* Httpbin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC51F671E08CEC70084D4EE /* Httpbin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		FA3C5C0A1DC0E8ED009E768C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA3C5C0C1DC1D128009E768C /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		FAB24CA31E0802EA003C20DC /* JSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JSON.framework; path = Carthage/Build/iOS/JSON.framework; sourceTree = "<group>"; };
+		FAC51F671E08CEC70084D4EE /* Httpbin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Httpbin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				FA103C811DC0C5B8003205E4 /* Networking.swift */,
 				FA3C5C0A1DC0E8ED009E768C /* User.swift */,
 				FA3C5C0C1DC1D128009E768C /* UserViewController.swift */,
+				FAC51F671E08CEC70084D4EE /* Httpbin.swift */,
 			);
 			path = Playground;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				FA3C5C0B1DC0E8ED009E768C /* User.swift in Sources */,
 				FA3C5C0D1DC1D128009E768C /* UserViewController.swift in Sources */,
 				FA103C821DC0C5B8003205E4 /* Networking.swift in Sources */,
+				FAC51F681E08CEC70084D4EE /* Httpbin.swift in Sources */,
 				FA103C721DC0C582003205E4 /* UserListViewController.swift in Sources */,
 				FA103C701DC0C582003205E4 /* AppDelegate.swift in Sources */,
 			);

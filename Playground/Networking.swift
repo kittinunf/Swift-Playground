@@ -25,10 +25,6 @@ struct RequestError: Error {
     let kind: ErrorKind
 }
 
-protocol Serializable {
-    func toDict() -> [String: AnyObject]
-}
-
 protocol Requestable {
     static func baseURL() -> URL
 }
@@ -37,17 +33,17 @@ protocol Request {
     var baseURL: URL { get }
     var method: Method { get }
     var path: String { get }
-    var body: [String: AnyObject] { get }
-    var header: [String: AnyObject] { get }
-    var queryParam: [String: AnyObject] { get }
+    var body: [String: Any] { get }
+    var header: [String: Any] { get }
+    var queryParam: [String: Any] { get }
 }
 
 extension Request {
     var method: Method { return .get }
     var path: String { return "" }
-    var body: [String: AnyObject] { return [:] }
-    var header: [String: AnyObject] { return [:] }
-    var queryParam: [String: AnyObject] { return [:] }
+    var body: [String: Any] { return [:] }
+    var header: [String: Any] { return [:] }
+    var queryParam: [String: Any] { return [:] }
 }
 
 protocol RequestConstructable : Request {
@@ -87,39 +83,23 @@ extension RequestConstructable {
     }
 }
 
-protocol Response {
+protocol Deserializable {
     associatedtype T
-
-    func parse(data: Data) -> T?
+    func deserialize(data: Data) -> T?
 }
 
-extension Response {
-    func parse(data: Data) -> T? {
+extension Deserializable {
+    func deserialize(data: Data) -> T? {
         return try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as? T
     }
 }
 
-protocol StringResponse : Response { }
-
-protocol IntResponse: Response { }
-
-extension StringResponse {
-    func parse(data: Data) -> String? {
-        return String(data: data, encoding: String.Encoding.utf8)
-    }
+protocol Serializable {
+    associatedtype T
+    func serialize(t: T) -> [String : Any]
 }
 
-extension IntResponse {
-    func parse(data: Data) -> Int? {
-        if let responseString =  String(data: data, encoding: String.Encoding.utf8) {
-            return Int(responseString)
-        } else {
-            return nil
-        }
-    }
-}
-
-protocol RequestCallable : RequestConstructable, Response {
+protocol RequestCallable : RequestConstructable, Deserializable {
     func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ())
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)>
 }
@@ -175,7 +155,7 @@ extension RequestCallable {
                 if !(200...299 ~= response.statusCode) {
                     let error = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!)
                     failure(error, response)
-                } else if let data = data, let result = self.parse(data: data)  {
+                } else if let data = data, let result = self.deserialize(data: data)  {
                     success(result, response)
                 } else {
                     let error = RequestError(kind: .deserialization)
@@ -193,6 +173,3 @@ extension RequestCallable {
     }
 }
 
-struct Github {
-    static let url = "https://api.github.com"
-}

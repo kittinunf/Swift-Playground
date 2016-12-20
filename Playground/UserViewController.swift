@@ -11,7 +11,6 @@ import RxSwift
 import RxCocoa
 
 class UserViewController : UIViewController {
-
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -51,5 +50,4 @@ class UserViewController : UIViewController {
             }
         }
     }
-
 }

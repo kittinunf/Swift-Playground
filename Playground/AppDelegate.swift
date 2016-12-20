@@ -8,9 +8,16 @@
 
 import UIKit
 
+struct Github {
+    static let url = "https://api.github.com"
+}
+
+struct HttpBin {
+    static let url = "https://httpbin.org"
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
 
 
@@ -40,7 +47,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
-

@@ -25,19 +25,19 @@ extension User : JSONDeserializable {
     }
 }
 
-protocol UserResponse : Response { }
+protocol UserResponse : Deserializable {}
 
 extension UserResponse {
-    func parse(data: Data) -> User? {
+    func deserialize(data: Data) -> User? {
         let dict = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String : Any]
         return try? User(jsonRepresentation: dict)
     }
 }
 
-protocol UserArrayResponse : Response { }
+protocol UserArrayResponse : Deserializable {}
 
 extension UserArrayResponse {
-    func parse(data: Data) -> [User]? {
+    func deserialize(data: Data) -> [User]? {
         let arr = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [[String : Any]]
         return try? arr.map(User.init)
     }
@@ -84,11 +84,7 @@ extension Github {
         let baseURL: URL = URL(string: url)!
 
         let method: Method = .get
-        var path: String {
-            get {
-                return "/users"
-            }
-        }
+        let path: String = "/users"
     }
 }
 

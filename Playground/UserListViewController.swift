@@ -32,6 +32,16 @@ class UserListViewController: UITableViewController {
                 break
             }
         }
+
+        HttpBin.Get().call().subscribe(onNext: {
+            let bin = $0.0.value
+            print(bin)
+        }, onError: nil, onCompleted: nil, onDisposed: nil)
+
+        HttpBin.Post(get: HttpBinGet(origin: "10.0.0.1", url: "www.cookpad.com", args: [:])).call().subscribe(onNext: {
+            let bin = $0.0.value
+            print(bin)
+        }, onError: nil, onCompleted: nil, onDisposed: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -55,40 +65,5 @@ extension UserListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItem = items[indexPath.row]
         performSegue(withIdentifier: "ToUser", sender: self)
-    }
-}
-
-protocol Loadable {
-    associatedtype T
-
-    static func loading() -> T
-    static func failed() -> T
-
-    func value() -> T
-}
-
-enum ListState<T: Loadable> {
-    case loading
-    case failed
-    case loaded([T])
-
-    var count: Int {
-        switch self {
-        case .loaded(let values):
-            return values.count
-        default:
-            return 1
-        }
-    }
-
-    func value(indexPath: IndexPath) -> T.T {
-        switch self {
-        case .loading:
-            return T.loading()
-        case .failed:
-            return T.failed()
-        case .loaded(let values):
-            return values[indexPath.row].value()
-        }
     }
 }
