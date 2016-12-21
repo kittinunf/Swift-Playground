@@ -23,12 +23,31 @@ extension HttpBinGet : JSONDeserializable {
     }
 }
 
+struct HttpBinHeaders {
+    let headers: [String : Any]
+}
+
+extension HttpBinHeaders : JSONDeserializable {
+    init(jsonRepresentation: JSONDictionary) throws {
+        headers = try decode(jsonRepresentation, key: "headers")
+    }
+}
+
 protocol HttpBinGetResponse : Deserializable {}
 
 extension HttpBinGetResponse {
     func deserialize(data: Data) -> HttpBinGet? {
         let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String : Any]
         return try? HttpBinGet(jsonRepresentation: json)
+    }
+}
+
+protocol HttpBinHeadersResponse : Deserializable {}
+
+extension HttpBinHeadersResponse {
+    func deserialize(data: Data) -> HttpBinHeaders? {
+        let json = try! JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String : Any]
+        return try? HttpBinHeaders(jsonRepresentation: json)
     }
 }
 
@@ -65,5 +84,13 @@ extension HttpBin {
             return ["origin" : get.origin,
                     "url": get.url]
         }
+    }
+
+    struct Headers: RequestCallable, HttpBinHeadersResponse {
+        typealias T = HttpBinHeaders
+
+        let baseURL: URL = URL(string: url)!
+        let method: Method = .post
+        let path: String = "/post"
     }
 }

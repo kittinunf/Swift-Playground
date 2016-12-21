@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Result
 
 class UserListViewController: UITableViewController {
     var items = [User]() {
@@ -33,15 +34,17 @@ class UserListViewController: UITableViewController {
             }
         }
 
-        HttpBin.Get().call().subscribe(onNext: {
-            let bin = $0.0.value
-            print(bin)
-        }, onError: nil, onCompleted: nil, onDisposed: nil)
+        callApiWithSameClosure(t: HttpBin.Get()) { result in
+            print(result.0)
+        }
 
-        HttpBin.Post(get: HttpBinGet(origin: "10.0.0.1", url: "www.cookpad.com", args: [:])).call().subscribe(onNext: {
-            let bin = $0.0.value
-            print(bin)
-        }, onError: nil, onCompleted: nil, onDisposed: nil)
+        callApiWithSameClosure(t: HttpBin.Post(get: HttpBinGet(origin: "10.0.0.1", url: "www.cookpad.com", args: [:]))) { result in
+            print(result.0)
+        }
+    }
+
+    func callApiWithSameClosure<T : RequestCallable>(t: T, handler: @escaping (Result<T.T, RequestError>, HTTPURLResponse?) -> ()) {
+        t.call(with: handler)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
