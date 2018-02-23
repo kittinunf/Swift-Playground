@@ -17,18 +17,21 @@ class UserViewController : UIViewController {
 
     var name: String?
 
+    let disposeBag = DisposeBag()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let _ = User.get(name: name!).observeOn(MainScheduler.instance).subscribe { [weak self] event in
-            guard let weakSelf = self else { return }
-            switch (event) {
-            case .next(let user):
-                weakSelf.update(with: user.value)
-            default:
-                break
-            }
-        }
+        User.get(name: name!).observeOn(MainScheduler.instance)
+            .subscribe { [weak self] event in
+                guard let weakSelf = self else { return }
+                switch (event) {
+                case .next(let user):
+                    weakSelf.update(with: user.value)
+                default:
+                    break
+                }
+        }.disposed(by: disposeBag)
     }
 
     private func update(with user: User?) {
@@ -40,14 +43,21 @@ class UserViewController : UIViewController {
         guard let url = URL(string: user.avatarUrl) else { return }
         let request = URLRequest(url: url)
         
-        let _ = URLSession.shared.rx.data(request: request).observeOn(MainScheduler.instance).subscribe { [weak self] event in
-            guard let weakSelf = self else { return }
-            switch (event) {
-            case .next(let data):
-                weakSelf.avatarImageView.image = UIImage(data: data)
-            default:
-                break
-            }
-        }
+        URLSession.shared.rx.data(request: request).observeOn(MainScheduler.instance)
+            .subscribe(onNext: loadData)
+          .disposed(by: disposeBag)
+    }
+
+    func loadData(data: Data) {
+        avatarImageView.image = UIImage(data: data)
+    }
+
+    func updateName(i: Int) {
+        print(i)
+//        name = "\(i)"
+    }
+
+    deinit {
+        print(#function)
     }
 }

@@ -17,12 +17,14 @@ struct RequestError: Error {
         case unauthorized = 401
         case forbidden = 403
         case notFound = 404
+        case methodNotAllow = 405
         case internalServer = 500
 
         case deserialization = 999
     }
 
     let kind: ErrorKind
+    let error: String
 }
 
 protocol Requestable {
@@ -75,7 +77,7 @@ extension RequestConstructable {
             }
         }
 
-        header.forEach { key, value in
+        for (key, value) in header {
             request.addValue(String(describing: value), forHTTPHeaderField: key)
         }
 
@@ -106,21 +108,21 @@ protocol RequestCallable : RequestConstructable, Deserializable {
 
 extension RequestCallable {
     func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
-        guard let request = self.createRequest() else {
-            let error = RequestError(kind: .unknown)
+        guard let request = createRequest() else {
+            let error = RequestError(kind: .unknown, error: "Request cannot be created!")
             handler(.failure(error), nil)
             return
         }
 
         let task = performTask(with: request, success: { (parsed, response) in
                 let result: Result<T, RequestError> = .success(parsed)
-                handler((result, response))
+                handler(result, response)
             }, failure: { (error, response) in
                 let result: Result<T, RequestError> = .failure(error)
-                handler((result, response))
+              handler(result, response)
             }, parseFailure: { (error, response) in
                 let result: Result<T, RequestError> = .failure(error)
-                handler((result, response))
+                handler(result, response)
             }) {
             }
 
@@ -129,7 +131,11 @@ extension RequestCallable {
 
     func call() -> Observable<(Result<T, RequestError>, HTTPURLResponse?)> {
         return Observable.create { observer in
-            guard let request = self.createRequest() else { return Disposables.create() }
+            guard let request = self.createRequest() else {
+                let error = RequestError(kind: .unknown, error: "Request cannot be created!")
+                observer.onNext((.failure(error), nil))
+                return Disposables.create()
+            }
 
             let task = self.performTask(with: request, success: { parsed, response in
                 observer.onNext((.success(parsed), response))
@@ -152,20 +158,22 @@ extension RequestCallable {
                              finish: @escaping () -> ()) -> URLSessionDataTask {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let response = response as? HTTPURLResponse {
-                if !(200...299 ~= response.statusCode) {
-                    let error = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!)
-                    failure(error, response)
+                let statusCode = response.statusCode
+                if !(200...299 ~= statusCode) {
+                    let err = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!,
+                                             error: data == nil ? "" : String(data: data!, encoding: .utf8)!)
+                    failure(err, response)
                 } else if let data = data, let result = self.deserialize(data: data)  {
                     success(result, response)
                 } else {
-                    let error = RequestError(kind: .deserialization)
-                    parseFailure(error, response)
+                    parseFailure(RequestError(kind: .deserialization, error: "Deserialization problem"), response)
                 }
             } else {
-                let error = RequestError(kind: .unknown)
-                failure(error, nil)
+                failure(RequestError(kind: .unknown, error: "Unknown problem"), nil)
             }
             finish()
+
+            
         }
 
         task.resume()
@@ -173,3 +181,34 @@ extension RequestCallable {
     }
 }
 
+extension URLRequest {
+    fileprivate func convertToCurlCommand() -> String {
+        let method = httpMethod ?? "GET"
+        var returnValue = "curl -X \(method) "
+
+        if let httpBody = httpBody, httpMethod == "POST" {
+            let maybeBody = String(data: httpBody, encoding: String.Encoding.utf8)
+            if let body = maybeBody {
+                returnValue += "-d \"\(escapeTerminalString(body))\" "
+            }
+        }
+
+        for (key, value) in allHTTPHeaderFields ?? [:] {
+            let escapedKey = escapeTerminalString(key as String)
+            let escapedValue = escapeTerminalString(value as String)
+            returnValue += "\n    -H \"\(escapedKey): \(escapedValue)\" "
+        }
+
+        let URLString = url?.absoluteString ?? "<unknown url>"
+
+        returnValue += "\n\"\(escapeTerminalString(URLString))\""
+        
+        returnValue += " -i -v"
+        
+        return returnValue
+    }
+
+    fileprivate func escapeTerminalString(_ value: String) -> String {
+        return value.replacingOccurrences(of: "\"", with: "\\\"", options:[], range: nil)
+    }
+}

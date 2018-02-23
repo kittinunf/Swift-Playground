@@ -91,6 +91,6 @@ extension HttpBin {
 
         let baseURL: URL = URL(string: url)!
         let method: Method = .post
-        let path: String = "/post"
+        let path: String = "/headers"
     }
 }
